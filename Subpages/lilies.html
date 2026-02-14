@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilies 🌸</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Comic Sans MS',cursive,sans-serif;
+    background: linear-gradient(135deg, #ffd6e0, #ffc0cb);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    position:relative;
+}
+
+/* 🌸 Floating Flower Emojis */
+.flower{
+    position:absolute;
+    pointer-events:none;
+    animation: floatUp linear forwards;
+    opacity:0.8;
+    z-index:1;
+}
+
+@keyframes floatUp{
+    0%{
+        transform: translateY(100vh) rotate(0deg);
+        opacity:0;
+    }
+    10%{
+        opacity:0.8;
+    }
+    100%{
+        transform: translateY(-10vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+/* Main container */
+.container{
+    text-align:center;
+    background: rgba(255,255,255,0.9);
+    padding:40px;
+    border-radius:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.3);
+    max-width:650px;
+    width:90%;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    color:#ff4fa3;
+    font-size:2.5em;
+    margin-bottom:20px;
+}
+
+/* GIF Image */
+.bouquet{
+    width:100%;
+    max-width:450px;
+    border-radius:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor:pointer;
+}
+
+/* Hover Pop */
+.bouquet:hover{
+    transform: scale(1.08);
+    box-shadow:0 25px 50px rgba(0,0,0,0.4);
+}
+
+/* Back Button */
+.back-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 25px;
+    background:#ff4fa3;
+    color:white;
+    text-decoration:none;
+    border-radius:25px;
+    font-weight:bold;
+    transition:0.3s ease;
+}
+
+.back-btn:hover{
+    background:#ff2f92;
+    transform:scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🌸 Lilies For You 🌸</h1>
+    <p>A little bouquet with butterflies just for us 💕</p>
+
+    <!-- Make sure this file name matches exactly -->
+    <img src="../Images/lilies.gif" alt="Animated Lilies Bouquet" class="bouquet">
+
+    <a href="../index.html" class="back-btn">💖 Back to Main Page</a>
+</div>
+
+<!-- 🌸 Unlimited Flower Generator (Instant Fill Version) -->
+<script>
+const flowers = ["🌸","🌷","🌼","💐","🌺"];
+
+function createFlower(){
+    const flower = document.createElement("div");
+    flower.classList.add("flower");
+
+    flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.fontSize = (Math.random() * 3 + 2.5) + "rem";
+    flower.style.animationDuration = (Math.random() * 10 + 10) + "s";
+
+    document.body.appendChild(flower);
+
+    setTimeout(() => {
+        flower.remove();
+    }, 20000);
+}
+
+/* 🌸 Instantly fill the screen */
+for(let i = 0; i < 50; i++){
+    createFlower();
+}
+
+/* 🌷 Keep generating continuously */
+setInterval(createFlower, 150);
+</script>
+
+</body>
+</html>

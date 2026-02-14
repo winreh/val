@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our First Meeting 💌</title>
+<style>
+html, body {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Comic Sans MS',cursive,sans-serif;
+    background: linear-gradient(135deg,#ffc0cb,#ff9ac9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Floating spam images */
+.spam-img {
+    position:absolute;
+    object-fit: cover;
+    opacity:0.5;
+    pointer-events:none;
+    will-change: transform;
+    animation-name: drift;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes drift {
+    0% { transform: translate(0px,0px) rotate(0deg); }
+    100% { transform: translate(var(--x-drift), var(--y-drift)) rotate(var(--rot)); }
+}
+
+/* Container to center everything */
+.container {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100%;
+}
+
+/* Envelope wrapper */
+.wrapper {
+    cursor: grab;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 50vw;
+    height: 50vh;
+    max-width: 800px;
+    max-height: 500px;
+    min-width: 300px;
+    min-height: 250px;
+}
+
+.wrapper.dragging {
+    cursor: grabbing;
+}
+
+/* Big corner hearts on envelope */
+.wrapper::before,
+.wrapper::after {
+    content: "💖";
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.8;
+    animation: floatHeart 3s infinite alternate ease-in-out;
+}
+
+.wrapper::before { top: -15px; left: -15px; }
+.wrapper::after { bottom: -15px; right: -15px; animation-delay: 1.5s; }
+
+@keyframes floatHeart {
+    0% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(5px,-10px) rotate(15deg); }
+    100% { transform: translate(-5px,10px) rotate(-15deg); }
+}
+
+/* Small hearts along envelope */
+.wrapper .heart-border {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0.6;
+    animation: driftBorder 6s infinite linear;
+}
+@keyframes driftBorder {
+    0% { transform: translate(0,0) rotate(0deg); }
+    100% { transform: translate(0,5px) rotate(360deg); }
+}
+
+/* Envelope */
+.envelope{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: linear-gradient(145deg,#ff6fa1,#ff4fa3);
+    border-radius:20px;
+    box-shadow: inset 0 0 50px rgba(255,255,255,0.2), 0 25px 60px rgba(0,0,0,0.4);
+    overflow:hidden;
+    z-index:1;
+}
+.envelope::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 70%);
+    pointer-events:none;
+}
+
+/* Flap */
+.flap{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:50%;
+    background: linear-gradient(145deg,#ff85b3,#ff6fb5);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+    box-shadow: inset 0 -5px 15px rgba(0,0,0,0.15);
+    z-index:3;
+}
+.wrapper.open .flap{
+    transform: rotateX(180deg);
+}
+
+/* Letter container */
+.letter-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Letter */
+.letter{
+    width: 90%;
+    height: 85%;
+    border-radius:15px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    opacity:0;
+    transition: all 0.8s ease;
+    z-index:2;
+    overflow:auto;
+    background: linear-gradient(rgba(255,182,193,0.35), rgba(255,182,193,0.35)), url('lilies.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: floatBackground 20s ease-in-out infinite alternate;
+    color:#444;
+}
+.letter::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    border-radius:15px;
+    background: radial-gradient(rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+    pointer-events:none;
+    animation: floatBokeh 6s infinite;
+}
+@keyframes floatBackground{
+    0% { background-position: center top; transform: scale(1); }
+    50% { background-position: center center; transform: scale(1.02); }
+    100% { background-position: center bottom; transform: scale(1); }
+}
+@keyframes floatBokeh{
+    0%{transform: translateY(0px) translateX(0px);}
+    50%{transform: translateY(-15px) translateX(10px);}
+    100%{transform: translateY(0px) translateX(0px);}
+}
+
+/* Text shading */
+.letter h2, .letter p {
+    position: relative;
+    background-color: rgba(255,230,240,0.7);
+    padding: 10px;
+    border-radius: 10px;
+    z-index:2;
+}
+
+/* NEXT PAGE */
+.next-page{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+}
+.next-page img{
+    width:80%;
+    max-width:200px;
+    margin:10px 0;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    object-fit:cover;
+    cursor:pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.next-page img:hover{
+    transform: scale(1.05);
+    box-shadow:0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* Letter visible when open */
+.wrapper.open .letter{
+    opacity:1;
+}
+
+/* Buttons */
+.button-container{ margin-top:20px; }
+button{
+    padding:10px 20px;
+    background:#ff4fa3;
+    color:white;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:5px;
+    transition:0.3s;
+}
+button:hover{ background:#ff6fb5; }
+
+/* Back button */
+.back{
+    position:absolute;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:12px 25px;
+    border-radius:25px;
+    text-decoration:none;
+    color:#ff4fa3;
+    font-weight:bold;
+}
+
+/* Fullscreen zoom overlay */
+#overlay{
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    z-index:998;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.4s;
+}
+#overlay img{
+    max-width:90%;
+    max-height:90%;
+    border-radius:15px;
+    transition: transform 0.5s;
+}
+#overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* Background photo behind envelope */
+.center-bg-photo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: auto;
+    border-radius: 15px;
+    z-index: 4;
+}
+
+/* Drag note above envelope */
+.drag-note {
+    position: absolute;
+    top: -30px; /* above the envelope */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff4fa3;
+    font-weight: bold;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 20;
+    text-shadow: 1px 1px 2px #fff;
+    opacity: 1; /* visible immediately */
+}
+
+/* Full-page heart frame */
+.page-frame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+.page-frame .heart {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.7;
+    animation: floatFrame 4s infinite alternate ease-in-out;
+}
+@keyframes floatFrame {
+    0% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(5px,-5px) rotate(15deg); }
+    100% { transform: translate(-5px,5px) rotate(-15deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- Background photo behind envelope -->
+<img src="../Images/hello.jpg" alt="Memory" class="center-bg-photo">
+
+<!-- Full-page heart frame -->
+<div class="page-frame">
+    <!-- Top row -->
+    <span class="heart" style="top:0; left:5%;">💖</span>
+    <span class="heart" style="top:0; left:25%;">💖</span>
+    <span class="heart" style="top:0; left:45%;">💖</span>
+    <span class="heart" style="top:0; left:65%;">💖</span>
+    <span class="heart" style="top:0; left:85%;">💖</span>
+    <!-- Bottom row -->
+    <span class="heart" style="bottom:0; left:5%;">💖</span>
+    <span class="heart" style="bottom:0; left:25%;">💖</span>
+    <span class="heart" style="bottom:0; left:45%;">💖</span>
+    <span class="heart" style="bottom:0; left:65%;">💖</span>
+    <span class="heart" style="bottom:0; left:85%;">💖</span>
+    <!-- Left column -->
+    <span class="heart" style="top:20%; left:0;">💖</span>
+    <span class="heart" style="top:40%; left:0;">💖</span>
+    <span class="heart" style="top:60%; left:0;">💖</span>
+    <span class="heart" style="top:80%; left:0;">💖</span>
+    <!-- Right column -->
+    <span class="heart" style="top:20%; right:0;">💖</span>
+    <span class="heart" style="top:40%; right:0;">💖</span>
+    <span class="heart" style="top:60%; right:0;">💖</span>
+    <span class="heart" style="top:80%; right:0;">💖</span>
+</div>
+
+<!-- Floating spam images -->
+<script>
+const spamImages = ['../Images/spam1.jpg','../Images/spam1.jpg','../Images/spam2.jpg','../Images/spam2.jpg'];
+const totalImages = 100;
+for(let i=0;i<totalImages;i++){
+    let img = document.createElement('img');
+    img.src = spamImages[Math.floor(Math.random()*spamImages.length)];
+    img.className='spam-img';
+    img.style.left = Math.random()*100+'vw';
+    img.style.top = Math.random()*100+'vh';
+    let size = 20+Math.random()*80;
+    img.style.width=size+'px';
+    img.style.height=size+'px';
+    img.style.opacity=0.3+Math.random()*0.7;
+    img.style.setProperty('--x-drift',(Math.random()*50-25)+'vw');
+    img.style.setProperty('--y-drift',(Math.random()*50-25)+'vh');
+    img.style.setProperty('--rot',(Math.random()*360)+'deg');
+    img.style.animationDuration=(15+Math.random()*20)+'s';
+    document.body.appendChild(img);
+}
+</script>
+
+<!-- Overlay for full-screen zoom -->
+<div id="overlay"><img id="overlay-img" src=""></div>
+
+<div class="container">
+    <!-- Envelope -->
+    <div class="wrapper" id="envelope-wrapper">
+        <!-- Drag note inside wrapper -->
+        <div class="drag-note">💌 Drag me around</div>
+
+        <!-- Small hearts for envelope -->
+        <span class="heart-border" style="top:5%; left:5%;">💖</span>
+        <span class="heart-border" style="top:5%; right:5%;">💖</span>
+        <span class="heart-border" style="bottom:5%; left:5%;">💖</span>
+        <span class="heart-border" style="bottom:5%; right:5%;">💖</span>
+        <span class="heart-border" style="top:50%; left:0%;">💖</span>
+        <span class="heart-border" style="top:50%; right:0%;">💖</span>
+        <span class="heart-border" style="top:0%; left:50%;">💖</span>
+        <span class="heart-border" style="bottom:0%; left:50%;">💖</span>
+
+        <div class="envelope"></div>
+        <div class="flap"></div>
+
+        <div class="letter-container">
+            <div class="letter" id="page1">
+                <h2>Our First Meeting 💞</h2>
+                <p>
+                "Pastilan sa kanto" It was already night when I spawned in your life, but we didn’t really connect at first.<br>
+                I thought it would just end there, but then the guitar showed up like a real wingman and helped us link up.<br>
+                HAHAHA! <br>
+                The first time I saw you, everything felt… different. I didn’t know that moment would turn into one of the 
+                best memories of my life.<br> You smiled, and suddenly, the world felt softer, like time slowed down just for us.
+                </p>
+                <div class="button-container">
+                    <button onclick="nextPage(event)">Next ➡</button>
+                </div>
+            </div>
+
+            <div class="letter next-page" id="page2">
+                <h2>📸</h2>
+                <div>
+                    <img class="zoomable" src="../Images/picture1.jpg" alt="Memory 1">
+                    <img class="zoomable" src="../Images/picture2.jpg" alt="Memory 2">
+                    <img class="zoomable" src="../Images/picture3.jpg" alt="Memory 3">
+                </div>
+                <p>magugulo mga lugar.png HAHAHAAHAHAHAH</p>
+                <div class="button-container">
+                    <button onclick="prevPage(event)">⬅ Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="../index.html" class="back">⬅ Back to Home</a>
+
+<script>
+const envelope = document.getElementById('envelope-wrapper');
+const overlay = document.getElementById('overlay');
+const overlayImg = document.getElementById('overlay-img');
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+
+// Envelope toggle
+envelope.addEventListener('click', (e)=>{
+    if(page1.style.display !== "none" && !e.target.closest('button')){
+        envelope.classList.toggle('open'); 
+    }
+    e.stopPropagation();
+});
+
+// Close envelope by clicking outside
+document.addEventListener('click', (e)=>{
+    if(!envelope.contains(e.target) && page1.style.display !== "none"){
+        envelope.classList.remove('open');
+    }
+});
+
+// Next/Prev pages
+function nextPage(e){
+    e.stopPropagation(); 
+    page1.style.display="none";
+    page2.style.display="flex";
+    envelope.classList.add('open');
+}
+function prevPage(e){
+    e.stopPropagation();
+    page2.style.display="none";
+    page1.style.display="block";
+    envelope.classList.remove('open');
+}
+
+// Zoomable images
+document.querySelectorAll('.zoomable').forEach(img=>{
+    img.addEventListener('click', ()=>{
+        overlayImg.src = img.src;
+        overlay.classList.add('show');
+    });
+});
+overlay.addEventListener('click', ()=>{
+    overlay.classList.remove('show');
+});
+
+// Smooth draggable envelope
+let isDragging = false;
+let startX, startY; 
+let currentX = 0, currentY = 0; 
+
+envelope.addEventListener('mousedown', (e) => {
+    if(page1.style.display !== "none" && !e.target.closest('button') && !e.target.closest('.letter')){
+        isDragging = true;
+        envelope.classList.add('dragging');
+        startX = e.clientX - currentX;
+        startY = e.clientY - currentY;
+        e.preventDefault();
+    }
+});
+
+document.addEventListener('mousemove', (e) => {
+    if(isDragging){
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+        envelope.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    if(isDragging){
+        isDragging = false;
+        envelope.classList.remove('dragging');
+    }
+});
+</script>
+
+</body>
+</html>

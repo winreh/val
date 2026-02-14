@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Love Story 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Comic Sans MS',cursive,sans-serif;
+    height:100vh;
+    overflow:hidden;
+    background:#ffb6d9;
+    position:relative;
+}
+
+/* ===== COLLAGE BACKGROUND ===== */
+.collage{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    z-index:2; /* images above overlay */
+}
+
+.collage img{
+    position:absolute;
+    object-fit:cover;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    filter:brightness(75%);
+    animation:float 7s ease-in-out infinite;
+    cursor:pointer;
+    z-index:2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease; /* Smooth pop */
+}
+
+.collage img:hover{
+    transform: scale(1.1); /* Pop up */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    filter: brightness(85%);
+}
+
+/* IMAGE SIZES */
+.small{width:160px;height:160px;}
+.medium{width:220px;height:220px;}
+.large{width:300px;height:300px;}
+.xlarge{width:380px;height:380px;}
+
+/* FLOAT ANIMATION */
+@keyframes float{
+    0%{transform:translateY(0px) rotate(var(--rotate));}
+    50%{transform:translateY(-20px) rotate(var(--rotate));}
+    100%{transform:translateY(0px) rotate(var(--rotate));}
+}
+
+/* PINK OVERLAY */
+.overlay{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,105,180,0.35);
+    z-index:1; /* behind images */
+}
+
+/* CENTERED MENU */
+.container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:3; /* above collage */
+    background:rgba(255,105,180,0.92);
+    padding:45px;
+    border-radius:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+    width:90%;
+    max-width:600px;
+    backdrop-filter:blur(8px);
+    text-align:center;
+    color:white;
+}
+
+h1{
+    font-size:2.5em;
+    margin-bottom:15px;
+}
+
+p{
+    font-size:1.2em;
+    margin-bottom:30px;
+}
+
+.btn{
+    display:block;
+    background:white;
+    color:#ff4fa3;
+    text-decoration:none;
+    padding:14px;
+    margin:12px auto;
+    width:85%;
+    border-radius:25px;
+    font-weight:bold;
+    transition:0.3s ease;
+}
+
+.btn:hover{
+    background:#ff4fa3;
+    color:white;
+    transform:scale(1.05);
+}
+
+/* HEART ANIMATION */
+.heart{
+    font-size:2em;
+    margin-bottom:10px;
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+/* LIGHTBOX */
+#lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.3s ease;
+    z-index:9999;
+}
+
+#lightbox.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+#lightbox img{
+    max-width:90%;
+    max-height:90%;
+    border-radius:15px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<!-- COLLAGE BACKGROUND -->
+<div class="collage">
+  <img src="Images/imagesphoto1.jpg" class="xlarge" style="top:-5%;left:-5%;--rotate:-12deg;">
+  <img src="Images/imagesphoto2.jpg" class="large" style="top:0%;left:25%;--rotate:8deg;">
+  <img src="Images/imagesphoto3.jpg" class="medium" style="top:-3%;left:55%;--rotate:-15deg;">
+  <img src="Images/imagesphoto4.jpg" class="large" style="top:5%;left:75%;--rotate:12deg;">
+  <img src="Images/imagesphoto5.jpg" class="xlarge" style="top:20%;left:-10%;--rotate:6deg;">
+  <img src="Images/imagesphoto6.jpg" class="medium" style="top:25%;left:20%;--rotate:-20deg;">
+  <img src="Images/imagesphoto7.jpg" class="small" style="top:28%;left:70%;--rotate:-10deg;">
+  <img src="Images/imagesphoto8.jpg" class="large" style="top:50%;left:20%;--rotate:15deg;">
+  <img src="Images/imagesphoto9.jpg" class="xlarge" style="top:45%;left:-5%;--rotate:-8deg;">
+  <img src="Images/imagesphoto10.jpg" class="xlarge" style="top:52%;left:80%;--rotate:-14deg;">
+  <img src="Images/imagesphoto11.jpg" class="large" style="top:55%;left:60%;--rotate:9deg;">
+  <img src="Images/imagesphoto12.jpg" class="medium" style="top:65%;left:5%;--rotate:13deg;">
+  <img src="Images/imagesphoto13.jpg" class="xlarge" style="top:78%;left:45%;--rotate:11deg;">
+  <img src="Images/imagesphoto14.jpg" class="large" style="top:15%;left:90%;--rotate:-6deg;">
+  <img src="Images/imagesphoto15.jpg" class="medium" style="top:80%;left:20%;--rotate:-17deg;">
+  <img src="Images/imagesphoto17.jpg" class="large" style="top:85%;left:70%;--rotate:-9deg;">
+  <img src="Images/imagesphoto20.jpg" class="large" style="top:75%;left:-8%;--rotate:10deg;">
+  <img src="Images/imagesphoto22.jpg" class="large" style="top:10%;left:45%;--rotate:-11deg;">
+  <img src="Images/imagesphoto23.jpg" class="small" style="top:35%;left:10%;--rotate:7deg;">
+  <img src="Images/imagesphoto26.jpg" class="medium" style="top:88%;left:90%;--rotate:16deg;">
+</div>
+
+<!-- PINK OVERLAY -->
+<div class="overlay"></div>
+
+<!-- CENTER MENU -->
+<div class="container">
+  <div class="heart">💗</div>
+  <h1>Happy Valentine's Day</h1>
+  <p>
+    Welcome to our little love story website 💕<br>
+    Click below to relive our journey together!
+  </p>
+  <a href="Subpages/first-meeting.html" class="btn">💞 First Meeting</a>
+  <a href="Subpages/core-memory.html" class="btn">💖 Core Memories</a>
+  <a href="Subpages/lilies.html" class="btn">🌸 Lilies</a>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <img src="" alt="Zoomed Image">
+</div>
+
+<script>
+// Make collage images clickable
+const images = document.querySelectorAll('.collage img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = lightbox.querySelector('img');
+
+images.forEach(img => {
+    img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('show');
+    });
+});
+
+// Click on lightbox to close
+lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('show');
+});
+</script>
+
+</body>
+</html>
